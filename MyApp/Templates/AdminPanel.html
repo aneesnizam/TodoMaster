@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Database Admin Panel</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #4361ee;
+        --primary-dark: #3a56d4;
+        --secondary: #3f37c9;
+        --success: #4cc9f0;
+        --danger: #f72585;
+        --warning: #f8961e;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --gray: #6c757d;
+        --light-gray: #e9ecef;
+        --white: #ffffff;
+        --sidebar-width: 250px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f5f7fa;
+        color: var(--dark);
+        line-height: 1.6;
+      }
+
+      .admin-container {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Sidebar Styles */
+      .sidebar {
+        width: var(--sidebar-width);
+        background: var(--dark);
+        color: var(--white);
+        padding: 1.5rem 0;
+        position: fixed;
+        height: 100vh;
+        transition: all 0.3s;
+      }
+
+      .sidebar-header {
+        padding: 0 1.5rem 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .sidebar-header h2 {
+        font-size: 1.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .sidebar-nav {
+        list-style: none;
+        padding: 1.5rem 0;
+      }
+
+      .sidebar-nav li a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.2s;
+      }
+
+      .sidebar-nav li a:hover,
+      .sidebar-nav li a.active {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--white);
+      }
+
+      .sidebar-nav li a i {
+        width: 20px;
+        text-align: center;
+      }
+
+      /* Main Content */
+      .main-content {
+        flex: 1;
+        margin-left: var(--sidebar-width);
+        padding: 2rem;
+      }
+
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .page-header h1 {
+        font-size: 1.8rem;
+        color: var(--dark);
+      }
+
+      /* Stats Cards */
+      .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: var(--white);
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .stat-card .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--primary);
+      }
+
+      .stat-card .stat-label {
+        color: var(--gray);
+        font-size: 0.9rem;
+      }
+
+      .stat-card .stat-icon {
+        align-self: flex-end;
+        font-size: 1.5rem;
+        color: rgba(67, 97, 238, 0.2);
+        margin-top: 0.5rem;
+      }
+
+      /* Badges */
+      .badge {
+        display: inline-block;
+        padding: 0.35rem 0.65rem;
+        border-radius: 50rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .badge-active {
+        background-color: rgba(76, 201, 240, 0.1);
+        color: var(--success);
+      }
+
+      .badge-inactive {
+        background-color: rgba(108, 117, 125, 0.1);
+        color: var(--gray);
+      }
+
+      /* Database Controls */
+      .database-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        background: var(--white);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .table-selector {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .table-selector select {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--light-gray);
+        border-radius: 0.25rem;
+        background-color: white;
+        font-size: 1rem;
+        min-width: 200px;
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .search-box input {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--light-gray);
+        border-radius: 0.25rem;
+        min-width: 250px;
+      }
+
+      /* Button Styles */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1.2rem;
+        border: none;
+        border-radius: 0.25rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-sm {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.85rem;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: var(--white);
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-dark);
+      }
+
+      .btn-success {
+        background: var(--success);
+        color: var(--white);
+      }
+
+      .btn-success:hover {
+        background: #3aa8d8;
+      }
+
+      .btn-warning {
+        background: var(--warning);
+        color: var(--white);
+      }
+
+      .btn-warning:hover {
+        background: #e68a1b;
+      }
+
+      .btn-danger {
+        background: var(--danger);
+        color: var(--white);
+      }
+
+      .btn-danger:hover {
+        background: #e51778;
+      }
+
+      /* Database Table */
+      .database-table-container {
+        background: var(--white);
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 2rem;
+      }
+
+      .database-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .database-table thead {
+        background: var(--primary);
+        color: var(--white);
+      }
+
+      .database-table th {
+        padding: 1rem;
+        text-align: left;
+        font-weight: 500;
+      }
+
+      .database-table td {
+        padding: 1rem;
+        border-bottom: 1px solid var(--light-gray);
+      }
+
+      .database-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .database-table tr:hover {
+        background: rgba(67, 97, 238, 0.05);
+      }
+
+      .actions-cell {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      /* Pagination */
+      .pagination {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: var(--white);
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .pagination-info {
+        color: var(--gray);
+        font-size: 0.9rem;
+      }
+
+      .pagination-controls {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 992px) {
+        .sidebar {
+          width: 80px;
+          padding: 1rem 0;
+        }
+
+        .sidebar-header h2 span,
+        .sidebar-nav li a span {
+          display: none;
+        }
+
+        .sidebar-nav li a {
+          justify-content: center;
+          padding: 0.75rem;
+        }
+
+        .main-content {
+          margin-left: 80px;
+        }
+
+        .stats-container {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .database-controls {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
+        .search-box {
+          width: 100%;
+        }
+
+        .search-box input {
+          width: 100%;
+          min-width: auto;
+        }
+
+        .database-table {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+
+        .stats-container {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2>
+            <i class="fas fa-database"></i>
+            <span>DB Admin</span>
+          </h2>
+        </div>
+        <ul class="sidebar-nav">
+          <li>
+            <a href="#" class="active"
+              ><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a
+            >
+          </li>
+          <li>
+            <a href="{% url 'adminApproval' %}"
+              ><i class="fas fa-users"></i> <span>User Approvals</span></a
+            >
+          </li>
+          <li>
+            <a href="{% url 'adminTable' %}"
+              ><i class="fas fa-table"></i> <span>Tables</span></a
+            >
+          </li>
+          <li>
+            <a href="#"><i class="fas fa-cog"></i> <span>Settings</span></a>
+          </li>
+          <li>
+            <a href="#"><i class="fas fa-file-alt"></i> <span>Logs</span></a>
+          </li>
+          <li>
+            <a href="#"
+              ><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a
+            >
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="page-header">
+          <h1>Database Management</h1>
+          <div class="user-info">
+            <span>Welcome, Admin</span>
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-container">
+          <div class="stat-card">
+            <div class="stat-value">{{datas|length}}</div>
+            <div class="stat-label">Total Users</div>
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">{{activeCount}}</div>
+            <div class="stat-label">Active Users</div>
+            <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">{{inactive_users}}</div>
+            <div class="stat-label">Inactive Users</div>
+            <div class="stat-icon"><i class="fas fa-user-clock"></i></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">{{pending_users}}</div>
+            <div class="stat-label">Pending Approvals</div>
+            <div class="stat-icon"><i class="fas fa-user-edit"></i></div>
+          </div>
+        </div>
+
+        <!-- Database Controls -->
+        <div class="database-controls">
+          <form method="GET" action="" class="search-box">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              name="q"
+              placeholder="Search records..."
+              value="{{ request.GET.q }}"
+            />
+          </form>
+
+          <button class="btn btn-success">
+            <i class="fas fa-plus"></i> Add Record
+          </button>
+        </div>
+
+        <!-- Database Table -->
+        <div class="database-table-container">
+          <table class="database-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Last Login</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if datas %}
+  {% for d in datas %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ d.full_name }}</td>
+      <td>{{ d.email }}</td>
+      <td>
+        <span class="badge badge-active">
+          {% if d.isblocked %}In Active{% else %}Active{% endif %}
+        </span>
+      </td>
+      <td>{{ d.date }}</td>
+      <td class="actions-cell">
+        <button class="btn btn-danger btn-sm">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+  {% endfor %}
+{% else %}
+  <tr>
+    <td colspan="6" style="text-align:center;">No results found.</td>
+  </tr>
+{% endif %}
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <div class="pagination-info">Showing 1 to 3 of 15 entries</div>
+          <div class="pagination-controls">
+            <button class="btn" disabled>
+              <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <button class="btn btn-primary">1</button>
+            <button class="btn">2</button>
+            <button class="btn">3</button>
+            <button class="btn">
+              Next <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

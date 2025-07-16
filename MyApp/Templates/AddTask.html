@@ -1,0 +1,114 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Task | TodoMaster</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/AddTask.css' %}">
+</head>
+<body>
+    <div class="task-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-tasks"></i>
+                <h1>TodoMaster</h1>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="{% url 'home' %}">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{% url 'addTask' %}" class="active">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Add Task</span>
+                </a>
+                <a href="#">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Today</span>
+                </a>
+                <a href="#">
+                    <i class="fas fa-star"></i>
+                    <span>Important</span>
+                </a>
+                <a href="#">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Completed</span>
+                </a>
+            </nav>
+        
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h2>Add New Task</h2>
+                <a href="{% url 'home' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Tasks</span>
+                </a>
+            </header>
+
+            <!-- Task Form -->
+            <form class="task-form" method="POST" action="{% url 'addTask' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Task Title</label>
+                    <input type="text" id="title" name="title" placeholder="What needs to be done?" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" placeholder="Add details (optional)" rows="4"></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="due_date">
+                            <i class="fas fa-calendar-alt"></i>
+                            Due Date
+                        </label>
+                        <input type="date" id="due_date" name="due_date">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">
+                            <i class="fas fa-tag"></i>
+                            Category
+                        </label>
+                        <select id="category" name="category">
+                            <option value="">Select Category</option>
+                            <option value="work">Work</option>
+                            <option value="personal">Personal</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="health">Health</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="important" name="important">
+                    <label for="important">
+                        <i class="far fa-star"></i>
+                        Mark as important
+                    </label>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="reset" class="btn btn-secondary">
+                        <i class="fas fa-times"></i>
+                        <span>Clear</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        <span>Save Task</span>
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/logo.png' %}">
+    <title>TodoMaster - Your Productivity Companion</title>
+    <link rel="stylesheet" href="{% static 'css/LandingPage.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="landing-header">
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-tasks"></i>
+                <span>TodoMaster</span>
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'features' %}">Features</a>
+                <a href="{% url 'howItWorks' %}">How It Works</a>
+                <a href="{% url 'login' %}" class="login-btn">Login</a>
+                <a href="{% url 'register' %}" class="register-btn">Register</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="landing-container">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Organize Your Life, <span class="highlight">One Task at a Time</span></h1>
+                <p class="subtitle">TodoMaster helps you stay productive and focused on what matters most. Simple, intuitive, and powerful task management.</p>
+                <div class="cta-buttons">
+                    <a href="{% url 'register' %}" class="primary-btn">Get Started - It's Free</a>
+                    <a href="{% url 'demo' %}" class="secondary-btn">See Demo <i class="fas fa-play-circle"></i></a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Todo App Interface">
+            </div>
+        </section>
+
+        <section id="features" class="features-section">
+            <h2>Why Choose TodoMaster?</h2>
+            <p class="section-subtitle">Everything you need to manage your tasks effectively</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Quick Add</h3>
+                    <p>Add tasks in seconds with our streamlined interface and keyboard shortcuts.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3>Categories</h3>
+                    <p>Organize tasks by projects, tags, or priorities for better workflow.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Reminders</h3>
+                    <p>Never miss deadlines with customizable notifications.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Access your tasks anywhere, on any device.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="how-it-works">
+            <h2>How It Works</h2>
+            <p class="section-subtitle">Get started in just a few simple steps</p>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Create Your Account</h3>
+                        <p>Sign up in less than a minute and start organizing your tasks.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Add Your Tasks</h3>
+                        <p>Quickly add tasks with due dates, priorities, and categories.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Stay Productive</h3>
+                        <p>Focus on what's important with our clean, distraction-free interface.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="testimonials">
+            <h2>What Our Users Say</h2>
+            <p class="section-subtitle">Join thousands of productive people</p>
+            
+            <div class="testimonial-cards">
+                <div class="testimonial-card">
+                    <div class="quote-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <p class="testimonial-text">TodoMaster has completely transformed how I organize my work. I'm 3x more productive since I started using it.</p>
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-details">
+                            <h4>Sabir</h4>
+                            <p>Freelance Designer</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="quote-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <p class="testimonial-text">The clean interface and powerful features make this the best todo app I've used. Highly recommended!</p>
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-details">
+                            <h4>Sreerag A</h4>
+                            <p>Software Developer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2>Ready to Boost Your Productivity?</h2>
+            <p class="section-subtitle">Join thousands of users who are getting more done every day</p>
+            <a href="{% url 'register' %}" class="primary-btn">Get Started for Free</a>
+        </section>
+    </main>
+
+    <footer class="landing-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-tasks"></i>
+                <span>TodoMaster</span>
+            </div>
+            
+            <div class="footer-links">
+                <div class="link-group">
+                    <h4>Product</h4>
+                    <a href="{% url 'features' %}">Features</a>
+                    <a href="{% url 'howItWorks' %}">How It Works</a>
+                    <a href="#pricing">Pricing</a>
+                </div>
+                
+                <div class="link-group">
+                    <h4>Company</h4>
+                    <a href="#">About Us</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Contact</a>
+                </div>
+                
+                <div class="link-group">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2023 TodoMaster. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

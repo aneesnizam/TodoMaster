@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How TodoMaster Works</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/HowItWorks.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="{% url 'landing' %}" class="logo">
+                <i class="fas fa-tasks"></i>
+                <span>TodoMaster</span>
+            </a>
+            <nav class="main-nav">
+                <a href="{% url 'landing' %}">Home</a>
+                <a href="{% url 'features' %}">Features</a>
+                <a href="{% url 'howItWorks' %}" class="active">How It Works</a>
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-primary">Sign Up</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="how-it-works-page">
+        <section class="hero">
+            <div class="container">
+                <h1>How TodoMaster Works</h1>
+                <p class="subtitle">Get organized in just a few simple steps</p>
+            </div>
+        </section>
+
+        <section class="steps-section">
+            <div class="container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h2>Create Your Account</h2>
+                        <p>Sign up in less than a minute to start organizing your tasks. Just provide your email and create a password.</p>
+                        <div class="step-image">
+                            <img src="https://images.unsplash.com/photo-1551269901-5c5e14c25df7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Sign up screen">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h2>Add Your Tasks</h2>
+                        <p>Click the "Add Task" button and enter your task details. You can add a title, description, due date, and category.</p>
+                        <div class="step-image">
+                            <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Add task screen">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h2>Organize & Prioritize</h2>
+                        <p>Use categories to organize your tasks and star important ones. Filter tasks by status (active/completed) to focus on what matters.</p>
+                        <div class="step-image">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Task organization">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h2>Stay Productive</h2>
+                        <p>Check off completed tasks, set reminders, and enjoy the satisfaction of getting things done with our clean, distraction-free interface.</p>
+                        <div class="step-image">
+                            <img src="https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Productivity">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <h2>Ready to Boost Your Productivity?</h2>
+                <p>Join thousands of users who are getting more done every day</p>
+                <div class="cta-buttons">
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-large">Get Started for Free</a>
+                    <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="logo">
+                        <i class="fas fa-tasks"></i>
+                        <span>TodoMaster</span>
+                    </div>
+                    <p>A simple, powerful todo app to help you stay organized and productive.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h3>Product</h3>
+                        <a href="{% url 'features' %}">Features</a>
+                        <a href="{% url 'howItWorks' %}">How It Works</a>
+                        <a href="{% url 'demo' %}">Pricing</a>
+                    </div>
+                    <div class="link-group">
+                        <h3>Company</h3>
+                        <a href="#">About Us</a>
+                        <a href="#">Blog</a>
+                        <a href="#">Contact</a>
+                    </div>
+                    <div class="link-group">
+                        <h3>Legal</h3>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 TodoMaster. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

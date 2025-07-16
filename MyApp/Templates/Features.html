@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TodoMaster Features</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/Features.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="{% url 'landing' %}" class="logo">
+                <i class="fas fa-tasks"></i>
+                <span>TodoMaster</span>
+            </a>
+            <nav class="main-nav">
+                <a href="{% url 'landing' %}">Home</a>
+                <a href="{% url 'features' %}" class="active">Features</a>
+                <a href="{% url 'howItWorks' %}">How It Works</a>
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-primary">Sign Up</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="features-page">
+        <section class="hero">
+            <div class="container">
+                <h1>Powerful Features</h1>
+                <p class="subtitle">Everything you need to organize your tasks and boost productivity</p>
+            </div>
+        </section>
+
+        <section class="features-intro">
+            <div class="container">
+                <div class="intro-content">
+                    <h2>Why Choose TodoMaster?</h2>
+                    <p>TodoMaster combines simplicity with powerful features to help you stay organized and focused on what matters most. Whether you're managing personal tasks or team projects, we've got you covered.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="feature-categories">
+            <div class="container">
+                <div class="category-tabs">
+                    <button class="tab-btn active" data-category="core">Core Features</button>
+                    <button class="tab-btn" data-category="organization">Organization</button>
+                    <button class="tab-btn" data-category="productivity">Productivity</button>
+                </div>
+
+                <div class="category-content active" id="core">
+                    <div class="feature-grid">
+                        <!-- Feature 1 -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <h3>Quick Task Creation</h3>
+                            <p>Add tasks in seconds with our streamlined interface. Keyboard shortcuts available for power users.</p>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h3>Task Completion</h3>
+                            <p>Mark tasks as complete with satisfying visual feedback. View your productivity history.</p>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-trash-alt"></i>
+                            </div>
+                            <h3>Task Management</h3>
+                            <p>Easily edit, delete, or restore tasks. Our trash system keeps your data safe.</p>
+                        </div>
+
+                        <!-- Feature 4 -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h3>Cross-Platform</h3>
+                            <p>Access your tasks anywhere. Fully responsive design works on all devices.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-content" id="organization">
+                    <div class="feature-grid">
+                        <!-- Feature 1 -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                            <h3>Categories & Tags</h3>
+                            <p>Organize tasks with custom categories and tags for better workflow management.</p>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-filter"></i>
+                            </div>
+                            <h3>Smart Filtering</h3>
+                            <p>Filter tasks by status, category, due date, or importance to focus on what matters.</p>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h3>Quick Search</h3>
+                            <p>Find any task instantly with our powerful search functionality.</p>
+                        </div>
+
+                        <!-- Feature 4 -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <h3>Task Groups</h3>
+                            <p>Group related tasks together for better project management.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-content" id="productivity">
+                    <div class="feature-grid">
+                        <!-- Feature 1 -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h3>Priority Marking</h3>
+                            <p>Star important tasks to highlight them in your lists and notifications.</p>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <h3>Reminders</h3>
+                            <p>Never miss deadlines with customizable notifications and email reminders.</p>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3>Productivity Stats</h3>
+                            <p>Track your completion rates and productivity trends over time.</p>
+                        </div>
+
+                        <!-- Feature 4 -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h3>Quick Actions</h3>
+                            <p>Keyboard shortcuts and bulk actions to save you time on task management.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="feature-highlight">
+            <div class="container">
+                <div class="highlight-content">
+                    <h2>Advanced Task Details</h2>
+                    <p>Each task can include rich details to help you stay organized:</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Due dates with calendar integration</li>
+                        <li><i class="fas fa-align-left"></i> Detailed descriptions with markdown support</li>
+                        <li><i class="fas fa-paperclip"></i> File attachments (coming soon)</li>
+                        <li><i class="fas fa-comment-alt"></i> Task comments and notes</li>
+                        <li><i class="fas fa-history"></i> Completion history and time tracking</li>
+                    </ul>
+                </div>
+                <div class="highlight-image">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Task details interface">
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <h2>Ready to Transform Your Productivity?</h2>
+                <p>Join thousands of users who are getting more done with TodoMaster</p>
+                <div class="cta-buttons">
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-large">Get Started for Free</a>
+                    <a href="{% url 'howItWorks' %}" class="btn btn-secondary">See How It Works</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="logo">
+                        <i class="fas fa-tasks"></i>
+                        <span>TodoMaster</span>
+                    </div>
+                    <p>A simple, powerful todo app to help you stay organized and productive.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h3>Product</h3>
+                        <a href="{% url 'features' %}">Features</a>
+                        <a href="{% url 'howItWorks' %}">How It Works</a>
+                        <a href="#">Pricing</a>
+                    </div>
+                    <div class="link-group">
+                        <h3>Company</h3>
+                        <a href="#">About Us</a>
+                        <a href="#">Blog</a>
+                        <a href="#">Contact</a>
+                    </div>
+                    <div class="link-group">
+                        <h3>Legal</h3>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 TodoMaster. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple tab functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons and content
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.category-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                btn.classList.add('active');
+                const category = btn.getAttribute('data-category');
+                document.getElementById(category).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

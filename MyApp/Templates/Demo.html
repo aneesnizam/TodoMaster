@@ -1,0 +1,197 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TodoMaster - Your Tasks</title>
+       <link rel="icon" href="{% static 'images/logo.png' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/Home.css' %}">
+</head>
+<body>
+    <div class="todo-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-tasks"></i>
+                <h1>TodoMaster</h1>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Today</span>
+                </a>
+                <a href="#">
+                    <i class="fas fa-star"></i>
+                    <span>Important</span>
+                </a>
+                <a href="#">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Completed</span>
+                </a>
+                <a href="#">
+                    <i class="fas fa-trash"></i>
+                    <span>Trash</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">JD</div>
+                    <div class="user-info">
+                        <span class="username">John Doe</span>
+                        <a href="#" class="logout">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h2>My Tasks</h2>
+                <div class="actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Task</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Task Form (Hidden by default) -->
+            <div class="task-form-container">
+                <form class="task-form">
+                    <div class="form-group">
+                        <input type="text" placeholder="Task title" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Description (optional)"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-alt"></i> Due Date</label>
+                            <input type="date">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-tag"></i> Category</label>
+                            <select>
+                                <option value="">None</option>
+                                <option value="work">Work</option>
+                                <option value="personal">Personal</option>
+                                <option value="shopping">Shopping</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-cancel">Cancel</button>
+                        <button type="submit" class="btn btn-save">Save Task</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Task Filters -->
+            <div class="task-filters">
+                <div class="filter active">All</div>
+                <div class="filter">Active</div>
+                <div class="filter">Completed</div>
+            </div>
+
+            <!-- Task List -->
+            <div class="task-list">
+                <!-- Task Item 1 -->
+                <div class="task-item">
+                    <div class="task-checkbox">
+                        <input type="checkbox" id="task1">
+                        <label for="task1"></label>
+                    </div>
+                    <div class="task-content">
+                        <div class="task-title">Complete project proposal</div>
+                        <div class="task-meta">
+                            <span class="task-category work">Work</span>
+                            <span class="task-due"><i class="fas fa-calendar-alt"></i> Tomorrow</span>
+                        </div>
+                    </div>
+                    <div class="task-actions">
+                        <button class="btn-icon star">
+                            <i class="far fa-star"></i>
+                        </button>
+                        <button class="btn-icon delete">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Task Item 2 -->
+                <div class="task-item completed">
+                    <div class="task-checkbox">
+                        <input type="checkbox" id="task2" checked>
+                        <label for="task2"></label>
+                    </div>
+                    <div class="task-content">
+                        <div class="task-title">Buy groceries</div>
+                        <div class="task-meta">
+                            <span class="task-category shopping">Shopping</span>
+                        </div>
+                    </div>
+                    <div class="task-actions">
+                        <button class="btn-icon star">
+                            <i class="far fa-star"></i>
+                        </button>
+                        <button class="btn-icon delete">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Task Item 3 -->
+                <div class="task-item important">
+                    <div class="task-checkbox">
+                        <input type="checkbox" id="task3">
+                        <label for="task3"></label>
+                    </div>
+                    <div class="task-content">
+                        <div class="task-title">Call mom for birthday</div>
+                        <div class="task-meta">
+                            <span class="task-category personal">Personal</span>
+                            <span class="task-due"><i class="fas fa-calendar-alt"></i> Today</span>
+                        </div>
+                    </div>
+                    <div class="task-actions">
+                        <button class="btn-icon star active">
+                            <i class="fas fa-star"></i>
+                        </button>
+                        <button class="btn-icon delete">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Task Item 4 -->
+                <div class="task-item">
+                    <div class="task-checkbox">
+                        <input type="checkbox" id="task4">
+                        <label for="task4"></label>
+                    </div>
+                    <div class="task-content">
+                        <div class="task-title">Morning workout routine</div>
+                    </div>
+                    <div class="task-actions">
+                        <button class="btn-icon star">
+                            <i class="far fa-star"></i>
+                        </button>
+                        <button class="btn-icon delete">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

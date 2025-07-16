@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TodoMaster Login</title>
+    <link rel="icon" href="{% static 'images/logo.png' %}" />
+    <link rel="stylesheet" href="{% static 'css/Login.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="login-wrapper">
+      <div class="login-container">
+        <div class="login-card">
+          <div class="logo">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <h1>Welcome Back</h1>
+          <p class="subtitle">Please enter your credentials</p>
+
+          <form class="login-form" method="POST" action="/login/">
+            {% csrf_token %} {% if messages %}
+            <div>
+              {% for message in messages %}
+              <div
+                style="
+                    padding: 12px;
+                    margin: 10px 0;
+                    border-radius: 5px;
+                    color: white;
+                    {% if message.tags == 'success' %}
+                        background-color: #4CAF50;
+                    {% elif message.tags == 'error' %}
+                        background-color: #f44336;
+                    {% elif message.tags == 'warning' %}
+                        background-color: #ff9800;
+                    {% elif message.tags == 'info' %}
+                        background-color: #2196F3;
+                    {% else %}
+                        background-color: #333;
+                    {% endif %}
+                "
+              >
+                {{ message }}
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="input-group">
+              <input
+                type="text"
+                id="username"
+                name="username"
+                required
+                placeholder=" "
+              />
+              <label for="username">Username/Email</label>
+              <i class="fas fa-user input-icon"></i>
+            </div>
+
+            <div class="input-group">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                placeholder=" "
+              />
+              <label for="password">Password</label>
+              <i class="fas fa-lock input-icon"></i>
+              <i class="fas fa-eye-slash toggle-password"></i>
+            </div>
+
+            <div class="options">
+              <label class="remember">
+                <input type="checkbox" name="rememberMe" />
+                <span class="checkmark"></span>
+                Remember me
+              </label>
+              <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="login-btn">
+              <span>Login</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </form>
+
+          <div class="divider">
+            <span>or</span>
+          </div>
+
+          <div class="social-login">
+            <button class="social-btn google">
+              <i class="fab fa-google"></i>
+              Continue with Google
+            </button>
+          </div>
+
+          <p class="signup-link">
+            Don't have an account? <a href="{% url 'register' %}">Sign up</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <script>
+      const togglePassword = document.querySelector(".toggle-password");
+      const passwordInput = document.getElementById("password");
+      togglePassword.addEventListener("click", () => {
+        const type =
+          passwordInput.getAttribute("type") == "password"
+            ? "text"
+            : "password";
+        passwordInput.setAttribute("type", type);
+        togglePassword.classList.toggle("fa-eye");
+        togglePassword.classList.toggle("fa-eye-slash");
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TodoMaster - Your Tasks</title>
+    <link rel="icon" href="{% static 'images/logo.png' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/Home.css' %}" />
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        let user = "{{ user.username }}";
+        let user_icon = user.slice(0, 2).toUpperCase();
+        document.getElementById("avatar").innerText = user_icon;
+      });
+    </script>
+  </head>
+  <body>
+    {% if messages %}
+    <div>
+      {% for message in messages %}
+      <div
+        style="
+          padding: 12px;
+          width: 50%;
+          left: 50%;
+          transform: translateX(-50%);
+          position: fixed;
+          top: 1px;
+          border-radius: 5px;
+          text-align: center;
+          color: white;
+          {% if message.tags == 'success' %}
+            background-color: #4CAF50;
+          {% elif message.tags == 'error' %}
+            background-color: #f44336;
+          {% elif message.tags == 'warning' %}
+            background-color: #ff9800;
+          {% elif message.tags == 'info' %}
+            background-color: #2196F3;
+          {% else %}
+            background-color: #333;
+          {% endif %}
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <span style="flex-grow: 1">{{ message }}</span>
+        <span
+          style="
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 20px;
+            padding: 0 8px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+          "
+          onmouseover="this.style.opacity='1'"
+          onmouseout="this.style.opacity='0.8'"
+          onclick="this.parentElement.remove()"
+          >&times;</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="todo-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <i class="fas fa-tasks"></i>
+          <h1>TodoMaster</h1>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="{% url 'home' %}" ><i class="fas fa-home"></i><span>Dashboard</span></a>
+          <a href="{% url 'today' %}"><i class="fas fa-calendar-alt"></i><span>Today</span></a>
+          <a href="{% url 'important' %}" class="active"><i class="fas fa-star"></i><span>Important</span></a>
+          <a href="{% url 'completed' %}"><i class="fas fa-check-circle"></i><span>Completed</span></a>
+          <a href="{% url 'profile' %}"><i class="fas fa-user"></i><span>Profile</span></a>
+          <a href="#"><i class="fas fa-trash"></i><span>Trash</span></a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="user-profile">
+            <div class="avatar" id="avatar">JD</div>
+            <div class="user-info">
+              <span class="username">{{ user.username|title }}</span>
+              <a href="{% url 'logout' %}" class="logout">Logout</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header class="content-header">
+          <h2>My Tasks</h2>
+          <div class="actions">
+            <a href="{% url 'addTask' %}" class="btn btn-primary" style="text-decoration: none;">
+              <i class="fas fa-plus"></i>
+              <span>Add Task</span>
+            </a>
+          </div>
+        </header>
+
+   
+        <div class="task-list">
+          {% for t in important %}
+          <div class="task-item important">
+            <!-- <div class="task-checkbox">
+              <input type="checkbox" id="task{{ forloop.counter }}" />
+              <label for="task{{ forloop.counter }}"></label>
+            </div> -->
+
+            <div class="task-content">
+              <div class="task-title">{{ t.title }}</div>
+              <div class="task-meta">
+                <span class="task-category {{ t.category|lower }}">{{ t.category }}</span>
+                <span class="task-due">
+                  <i class="fas fa-calendar-alt"></i>
+                  {{ t.due_date|date:"F j, Y" }}
+                </span>
+              </div>
+            </div>
+
+            <div class="task-actions">
+              <button class="btn-icon star {% if t.important %}active{% endif %}">
+                <i class="{% if t.important %}fas{% else %}far{% endif %} fa-star"></i>
+              </button>
+              <button class="btn-icon delete">
+                <i class="far fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+          {% empty %}
+          <p>No tasks found.</p>
+          {% endfor %}
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
