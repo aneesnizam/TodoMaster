@@ -16,7 +16,8 @@ SECRET_KEY = config('SECRET_KEY', default='unsafe-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['*']  # Or use Render domain when known
+ALLOWED_HOSTS = ['todomaster-0c9e.onrender.com', 'localhost', '127.0.0.1']
+
 
 
 
