@@ -33,7 +33,7 @@ urlpatterns = [
         path('delete_user/<int:taskid>',
          views.delete_user, name="delete_user"),
         path('admin_logout/', views.admin_logout, name="admin_logout"),
-            path('create-admin/', views.create_admin),
+        
 
 
 ]
