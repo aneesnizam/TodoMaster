@@ -4,10 +4,10 @@ from django.contrib.auth.hashers import make_password,check_password
 from django.contrib import messages
 from datetime import date
 from django.db.models import Q
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
+from django.views.decorators.cache import never_cache
 
-
-def login(request):
+def login_user(request):
     # Check if user is already logged in
     user_id = request.session.get('user_id')
     if user_id:
@@ -77,13 +77,20 @@ def landing(request):
     return render(request,'LandingPage.html')
 
 def home(request):
-    
+     
     user_id = request.session.get('user_id')
    
     if user_id:
+        
         user = userDatas.objects.get(id = user_id )
-        tasks = task.objects.filter(user_id = user_id).order_by('due_date')
-        return render(request,'Home.html',{'user':user,'tasks':tasks})
+        if user.isApproved == True:
+            tasks = task.objects.filter(user_id = user_id).order_by('due_date')
+            return render(request,'Home.html',{'user':user,'tasks':tasks})
+        del request.session['user_id']
+
+        return redirect('login')
+            
+        
 
        
     return redirect('login')
@@ -97,7 +104,7 @@ def howItWorks(request):
 def features(request):
     return render(request,'Features.html')
 
-def logout(request):
+def logoutUser(request):
     request.session.flush()
     return redirect('login')
 
@@ -206,10 +213,11 @@ def completed(request):
         request.session.flush()
         redirect('login')
         
-def adminLogin(request):
-    return render(request,'AdminLogin.html')
 
+@never_cache
 def adminPanel(request):
+    if not request.user.is_authenticated or not request.user.is_staff:
+        return redirect('adminLogin')
     query = request.GET.get('q')
     if query:
         datas = userDatas.objects.filter(Q(full_name__icontains = query)|Q(email__icontains = query))
@@ -226,10 +234,11 @@ def adminPanel(request):
         return render(request,'AdminPanel.html')
         
 
-def adminTable(request):
-    return render(request,'AdminTable.html')
+
 
 def adminApproval(request):
+    if not request.user.is_authenticated or not request.user.is_staff:
+        return redirect('adminLogin')
     datas = userDatas.objects.all()
     if datas:
         return render(request,'AdminApproval.html',{'datas':datas})
@@ -249,3 +258,44 @@ def revoke_user(request, userId):
     user.isApproved = False
     user.save()
     return redirect('adminApproval')
+
+def mark_as_complete(request,taskid):
+    usertask = get_object_or_404(task,id=taskid)
+    usertask.completed = True
+    usertask.save()
+    return redirect('home')
+    
+def important_toggle(request,taskid):
+    usertask=get_object_or_404(task,id=taskid)
+    usertask.important = not usertask.important
+    usertask.save()
+    return redirect('home')
+
+def adminLogin(request):
+    if request.user.is_authenticated:
+        return redirect('adminPanel')
+        
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request,username = username,password=password)
+        if user is not None and user.is_staff:
+            login(request,user)
+            return redirect('adminPanel')
+        else:
+            messages.error(request,"Invalid credentials or not authorized as admin" )
+    return render(request, 'AdminLogin.html')
+
+def delete_item(request,taskid):
+    item = get_object_or_404(task,id=taskid)
+    item.delete()
+    return redirect('home')
+
+def delete_user(request,taskid):
+    item = get_object_or_404(userDatas,id=taskid)
+    item.delete()
+    return redirect('adminPanel')
+
+def admin_logout(request):
+    logout(request)
+    return redirect('adminLogin')

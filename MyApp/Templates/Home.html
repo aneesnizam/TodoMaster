@@ -138,12 +138,12 @@
               {% if t.completed %}
               <span class="completed-tag">Completed</span>
               {% else %}
-                <a class="pending-tag" href="">Mark Complete</a>
+                <a class="pending-tag" href="{% url 'mark_as_complete' t.id %}">Mark Complete</a>
                 {% endif %}
-              <button class="btn-icon star {% if t.important %}active{% endif %}">
+              <a class="btn-icon star {% if t.important %}active{% endif %}" href="{% url 'important_toggle' t.id %}">
                 <i class="{% if t.important %}fas{% else %}far{% endif %} fa-star"></i>
-              </button>
-              <button class="btn-icon delete">
+              </a>
+              <button class="btn-icon delete"  onclick="handledelete(`{% url 'delete_item' t.id %}`)">
                 <i class="far fa-trash-alt"></i>
               </button>
             </div>
@@ -154,5 +154,14 @@
         </div>
       </main>
     </div>
+    <script>
+      const handledelete = (id) => {
+        const ask = confirm("Do you want to delete task?")
+        if(ask){
+          window.location.href= id
+        }
+
+      }
+    </script>
   </body>
-2</html>
+  </html>

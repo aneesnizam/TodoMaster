@@ -139,6 +139,54 @@
     </style>
   </head>
   <body>
+       {% if messages %}
+    <div>
+      {% for message in messages %}
+      <div
+        style="
+          padding: 12px;
+          width: 50%;
+          left: 50%;
+          transform: translateX(-50%);
+          position: fixed;
+          top: 1px;
+          border-radius: 5px;
+          text-align: center;
+          color: white;
+          {% if message.tags == 'success' %}
+            background-color: #4CAF50;
+          {% elif message.tags == 'error' %}
+            background-color: #f44336;
+          {% elif message.tags == 'warning' %}
+            background-color: #ff9800;
+          {% elif message.tags == 'info' %}
+            background-color: #2196F3;
+          {% else %}
+            background-color: #333;
+          {% endif %}
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <span style="flex-grow: 1">{{ message }}</span>
+        <span
+          style="
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 20px;
+            padding: 0 8px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+          "
+          onmouseover="this.style.opacity='1'"
+          onmouseout="this.style.opacity='0.8'"
+          onclick="this.parentElement.remove()"
+          >&times;</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
     <div class="admin-login-container">
       <div class="admin-login-card">
         <div class="admin-login-header">
@@ -146,7 +194,8 @@
           <p>Please enter your credentials to continue</p>
         </div>
 
-        <form class="admin-login-form" action="/admin/login" method="POST">
+        <form class="admin-login-form" action="/adminLogin/" method="POST">
+          {% csrf_token %}
           <div class="input-group">
             <label for="username">Admin ID</label>
             <input

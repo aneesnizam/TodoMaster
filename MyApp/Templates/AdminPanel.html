@@ -399,18 +399,7 @@
             >
           </li>
           <li>
-            <a href="{% url 'adminTable' %}"
-              ><i class="fas fa-table"></i> <span>Tables</span></a
-            >
-          </li>
-          <li>
-            <a href="#"><i class="fas fa-cog"></i> <span>Settings</span></a>
-          </li>
-          <li>
-            <a href="#"><i class="fas fa-file-alt"></i> <span>Logs</span></a>
-          </li>
-          <li>
-            <a href="#"
+            <a href="{% url 'admin_logout' %}"
               ><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a
             >
           </li>
@@ -462,9 +451,9 @@
             />
           </form>
 
-          <button class="btn btn-success">
+          <!-- <button class="btn btn-success">
             <i class="fas fa-plus"></i> Add Record
-          </button>
+          </button> -->
         </div>
 
         <!-- Database Table -->
@@ -489,12 +478,12 @@
       <td>{{ d.email }}</td>
       <td>
         <span class="badge badge-active">
-          {% if d.isblocked %}In Active{% else %}Active{% endif %}
+          {% if d.isApproved %}Active{% else %}In Active{% endif %}
         </span>
       </td>
       <td>{{ d.date }}</td>
       <td class="actions-cell">
-        <button class="btn btn-danger btn-sm">
+        <button class="btn btn-danger btn-sm" onclick="handledelete(`{% url 'delete_user' d.id %}`)">
           <i class="fas fa-trash"></i>
         </button>
       </td>
@@ -511,7 +500,7 @@
         </div>
 
         <!-- Pagination -->
-        <div class="pagination">
+        <!-- <div class="pagination">
           <div class="pagination-info">Showing 1 to 3 of 15 entries</div>
           <div class="pagination-controls">
             <button class="btn" disabled>
@@ -524,8 +513,17 @@
               Next <i class="fas fa-chevron-right"></i>
             </button>
           </div>
-        </div>
+        </div> -->
       </main>
     </div>
+       <script>
+      const handledelete = (id) => {
+        const ask = confirm("Do you want to delete task?")
+        if(ask){
+          window.location.href= id
+        }
+
+      }
+    </script>
   </body>
 </html>
