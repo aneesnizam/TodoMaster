@@ -6,6 +6,9 @@ from datetime import date
 from django.db.models import Q
 from django.contrib.auth import authenticate,login,logout
 from django.views.decorators.cache import never_cache
+from django.http import HttpResponse
+from django.contrib.auth.models import User
+
 
 def login_user(request):
     # Check if user is already logged in
@@ -299,3 +302,12 @@ def delete_user(request,taskid):
 def admin_logout(request):
     logout(request)
     return redirect('adminLogin')
+
+
+
+def create_admin(request):
+    if User.objects.filter(username='admin').exists():
+        return HttpResponse("Admin user already exists.")
+    
+    User.objects.create_superuser('admin', 'admin@example.com', 'anees@123')
+    return HttpResponse("Superuser created successfully.")
