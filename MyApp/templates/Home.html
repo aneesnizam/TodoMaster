@@ -12,12 +12,41 @@
     />
     <link rel="stylesheet" href="{% static 'css/Home.css' %}" />
 
+
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         let user = "{{ user.username }}";
         let user_icon = user.slice(0, 2).toUpperCase();
         document.getElementById("avatar").innerText = user_icon;
+        
+        // Mobile menu toggle functionality
+        const hamburger = document.querySelector('.hamburger');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.overlay');
+        
+        if (hamburger) {
+          hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+          });
+        }
+        
+        if (overlay) {
+          overlay.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+          });
+        }
       });
+      
+      const handledelete = (id) => {
+        const ask = confirm("Do you want to delete task?")
+        if(ask){
+          window.location.href= id
+        }
+      }
     </script>
   </head>
   <body>
@@ -71,6 +100,16 @@
     {% endif %}
 
     <div class="todo-container">
+      <!-- Hamburger Menu Icon (Mobile Only) -->
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
+      <!-- Overlay for mobile menu -->
+      <div class="overlay"></div>
+
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="sidebar-header">
@@ -84,7 +123,6 @@
           <a href="{% url 'important' %}"><i class="fas fa-star"></i><span>Important</span></a>
           <a href="{% url 'completed' %}"><i class="fas fa-check-circle"></i><span>Completed</span></a>
           <a href="{% url 'profile' %}"><i class="fas fa-user"></i><span>Profile</span></a>
-          <a href="#"><i class="fas fa-trash"></i><span>Trash</span></a>
         </nav>
 
         <div class="sidebar-footer">
@@ -154,14 +192,5 @@
         </div>
       </main>
     </div>
-    <script>
-      const handledelete = (id) => {
-        const ask = confirm("Do you want to delete task?")
-        if(ask){
-          window.location.href= id
-        }
-
-      }
-    </script>
   </body>
-  </html>
+</html>

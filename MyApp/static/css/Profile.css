@@ -402,20 +402,16 @@ body {
     height: auto;
   }
 
-  .profile-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
   .profile-actions,
   .form-actions {
     flex-direction: column;
   }
 
   .btn {
-    width: 100%;
+    width: 80%;
+    margin: 0 auto;
     justify-content: center;
+    align-items: center;
   }
 }
 

@@ -19,6 +19,9 @@
             --light-gray: #e9ecef;
             --white: #ffffff;
             --sidebar-width: 250px;
+            --sidebar-collapsed-width: 80px;
+            --header-height: 70px;
+            --transition-speed: 0.3s;
         }
 
         * {
@@ -32,11 +35,13 @@
             background-color: #f5f7fa;
             color: var(--dark);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .admin-container {
             display: flex;
             min-height: 100vh;
+            position: relative;
         }
 
         /* Sidebar Styles */
@@ -47,12 +52,17 @@
             padding: 1.5rem 0;
             position: fixed;
             height: 100vh;
-            transition: all 0.3s;
+            transition: all var(--transition-speed);
+            z-index: 1000;
+            overflow-y: auto;
         }
 
         .sidebar-header {
             padding: 0 1.5rem 1.5rem;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .sidebar-header h2 {
@@ -60,6 +70,7 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            white-space: nowrap;
         }
 
         .sidebar-nav {
@@ -75,6 +86,7 @@
             gap: 0.75rem;
             padding: 0.75rem 1.5rem;
             transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .sidebar-nav li a:hover,
@@ -88,11 +100,23 @@
             text-align: center;
         }
 
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            color: #000; /* Changed to black */
+            font-size: 1.5rem;
+        }
+
         /* Main Content */
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
             padding: 2rem;
+            transition: margin-left var(--transition-speed);
         }
 
         .page-header {
@@ -107,6 +131,7 @@
             color: var(--dark);
         }
 
+        /* Badges */
         .badge {
             display: inline-block;
             padding: 0.35rem 0.65rem;
@@ -140,11 +165,14 @@
             padding: 1rem;
             border-radius: 0.5rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .filter-tabs {
             display: flex;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
         .filter-tab {
@@ -153,6 +181,7 @@
             cursor: pointer;
             font-weight: 500;
             transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .filter-tab.active {
@@ -168,13 +197,16 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            flex-grow: 1;
+            min-width: 250px;
+            max-width: 400px;
         }
 
         .search-box input {
             padding: 0.5rem 1rem;
             border: 1px solid var(--light-gray);
             border-radius: 0.25rem;
-            min-width: 250px;
+            width: 100%;
         }
 
         /* Button Styles */
@@ -188,7 +220,7 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            text-decoration: none; /* Added for anchor tags */
+            text-decoration: none;
         }
 
         .btn-sm {
@@ -210,9 +242,17 @@
             color: var(--white);
         }
 
+        .btn-success:hover {
+            background: #3ab7d9;
+        }
+
         .btn-danger {
             background: var(--danger);
             color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background: #e5177a;
         }
 
         /* User Requests Table */
@@ -222,11 +262,13 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             overflow: hidden;
             margin-bottom: 2rem;
+            overflow-x: auto;
         }
 
         .data-table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 600px;
         }
 
         .data-table thead {
@@ -271,6 +313,7 @@
             justify-content: center;
             color: var(--gray);
             font-weight: bold;
+            flex-shrink: 0;
         }
 
         .user-details h4 {
@@ -286,13 +329,32 @@
         .action-buttons {
             display: flex;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
-        /* Responsive */
-        @media (max-width: 992px) {
+        /* Mobile Menu Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-speed);
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
             .sidebar {
-                width: 80px;
-                padding: 1rem 0;
+                transform: translateX(calc(var(--sidebar-collapsed-width) - var(--sidebar-width)));
             }
             
             .sidebar-header h2 span,
@@ -306,48 +368,130 @@
             }
             
             .main-content {
-                margin-left: 80px;
+                margin-left: var(--sidebar-collapsed-width);
+            }
+
+            .sidebar:hover {
+                transform: translateX(0);
+                width: var(--sidebar-width);
+            }
+
+            .sidebar:hover .sidebar-header h2 span,
+            .sidebar:hover .sidebar-nav li a span {
+                display: inline;
+            }
+
+            .sidebar:hover .sidebar-nav li a {
+                justify-content: flex-start;
+                padding: 0.75rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar-header h2 span,
+            .sidebar-nav li a span {
+                display: inline;
+            }
+
+            .sidebar-nav li a {
+                justify-content: flex-start;
+                padding: 0.75rem 1.5rem;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .sidebar-header {
+                padding: 0 1rem 1.5rem;
             }
         }
 
         @media (max-width: 768px) {
-            .filter-controls {
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .page-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 1rem;
+                margin-bottom: 1.5rem;
             }
-            
+
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
             .filter-tabs {
-                width: 100%;
                 overflow-x: auto;
                 padding-bottom: 0.5rem;
+                scrollbar-width: none;
             }
-            
+
+            .filter-tabs::-webkit-scrollbar {
+                display: none;
+            }
+
             .search-box {
-                width: 100%;
+                max-width: 100%;
             }
-            
-            .search-box input {
-                width: 100%;
-                min-width: auto;
+
+            .action-buttons {
+                justify-content: center;
             }
-            
-            .data-table {
-                display: block;
-                overflow-x: auto;
-                white-space: nowrap;
+        }
+
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .user-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .btn-sm {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
     <div class="admin-container">
-        <aside class="sidebar">
+        <!-- Overlay for mobile menu -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2>
                     <i class="fas fa-user-shield"></i>
                     <span>Admin Panel</span>
                 </h2>
+                <!-- Removed the close button from here -->
             </div>
             <ul class="sidebar-nav">
                 <li><a href="{% url 'adminPanel' %}"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
@@ -356,11 +500,16 @@
             </ul>
         </aside>
 
+        <!-- Main Content Area -->
         <main class="main-content">
             <div class="page-header">
+                <button class="hamburger" id="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <h1>User Approval Requests</h1>
-                </div>
+            </div>
 
+            <!-- Filter Controls -->
             <div class="filter-controls">
                 <div class="filter-tabs">
                     <div class="filter-tab active">All Requests</div>
@@ -374,6 +523,7 @@
                 </div>
             </div>
 
+            <!-- User Requests Table -->
             <div class="table-container">
                 <table class="data-table">
                     <thead>
@@ -398,7 +548,11 @@
                             </td>
                             <td>{{d.date}}</td>
                             <td>{{d.email}}</td>
-                            <td><span class="badge {% if d.isApproved %}badge-approved{% else %} badge-pending{% endif %}">{% if d.isApproved %}Approved{% else %} Pending{% endif %}</span></td>
+                            <td>
+                                <span class="badge {% if d.isApproved %}badge-approved{% else %}badge-pending{% endif %}">
+                                    {% if d.isApproved %}Approved{% else %}Pending{% endif %}
+                                </span>
+                            </td>
                             <td>
                                 <div class="action-buttons">
                                     {% if d.isApproved %}
@@ -420,40 +574,86 @@
                     </tbody>
                 </table>
             </div>
-            </main>
+        </main>
     </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Filter tab functionality
-        document.querySelectorAll('.filter-tab').forEach(tab => {
-            tab.addEventListener('click', function () {
-                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                // Implement actual filtering logic here based on the tab clicked
-                // For example, you might make an AJAX call to filter the 'datas'
-                // or dynamically show/hide rows based on their status.
-                console.log(`Filter tab clicked: ${this.textContent.trim()}`);
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // DOM Elements
+            const sidebar = document.getElementById('sidebar');
+            const hamburger = document.getElementById('mobile-menu-toggle');
+            const overlay = document.getElementById('overlay');
+            
+            // Toggle mobile menu
+            hamburger.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
             });
-        });
+            
+            // Close mobile menu when clicking overlay
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+            
+            // Filter tab functionality
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', function () {
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    // Implement actual filtering logic here based on the tab clicked
+                    filterTable(this.textContent.trim());
+                });
+            });
 
-        // Add any other necessary client-side JS here, e.g., for search
-        const searchInput = document.querySelector('.search-box input');
-        searchInput.addEventListener('keyup', function() {
-            const searchTerm = this.value.toLowerCase();
-            const rows = document.querySelectorAll('.data-table tbody tr');
-            rows.forEach(row => {
-                const userName = row.querySelector('.user-details h4').textContent.toLowerCase();
-                const userEmail = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-                if (userName.includes(searchTerm) || userEmail.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
+            // Search functionality
+            const searchInput = document.querySelector('.search-box input');
+            searchInput.addEventListener('keyup', function() {
+                const searchTerm = this.value.toLowerCase();
+                filterTable(null, searchTerm);
+            });
+            
+            // Filter table based on status and search term
+            function filterTable(status = null, searchTerm = '') {
+                const rows = document.querySelectorAll('.data-table tbody tr');
+                
+                rows.forEach(row => {
+                    const rowStatus = row.querySelector('.badge').textContent.trim().toLowerCase();
+                    const userName = row.querySelector('.user-details h4').textContent.toLowerCase();
+                    const userEmail = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                    
+                    const statusMatch = !status || status === 'All Requests' || 
+                                      rowStatus === status.toLowerCase();
+                    const searchMatch = !searchTerm || 
+                                      userName.includes(searchTerm) || 
+                                      userEmail.includes(searchTerm);
+                    
+                    row.style.display = (statusMatch && searchMatch) ? '' : 'none';
+                });
+            }
+            
+            // Auto-close mobile menu when clicking on a menu item
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 992) {
+                        sidebar.classList.remove('active');
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+            
+            // Close menu when window is resized above breakpoint
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 992) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
                 }
             });
         });
-    });
-</script>
-
+    </script>
 </body>
 </html>

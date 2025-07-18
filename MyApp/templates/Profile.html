@@ -2,161 +2,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile | TodoMaster</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/Profile.css' %}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Profile | TodoMaster</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/Profile.css' %}">
+
+  <style>
+    @media (max-width: 768px) {
+      .todo-container {
+        position: relative;
+      }
+
+      .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        bottom: 0;
+        width: 250px;
+        transition: left 0.3s ease;
+        z-index: 1000;
+      }
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 25px;
+        cursor: pointer;
+        position: fixed;
+        left: 15px;
+        top: 15px;
+        z-index: 1001;
+      }
+
+      .hamburger span {
+        height: 3px;
+        width: 100%;
+        background-color: #333;
+        display: block;
+        transition: all 0.3s ease;
+      }
+
+      .hamburger.active {
+        display: none;
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding-top: 60px;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+      }
+
+      .overlay.active {
+        display: block;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .hamburger,
+      .overlay {
+        display: none !important;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const hamburger = document.querySelector('.hamburger');
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.querySelector('.overlay');
+
+      if (hamburger) {
+        hamburger.addEventListener('click', () => {
+          hamburger.classList.toggle('active');
+          sidebar.classList.toggle('active');
+          overlay.classList.toggle('active');
+        });
+      }
+
+      if (overlay) {
+        overlay.addEventListener('click', () => {
+          hamburger.classList.remove('active');
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+        });
+      }
+    });
+  </script>
 </head>
 <body>
-    <!-- Particle.js Background Container -->
-    <div id="particles-js"></div>
-
-    <div class="profile-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <i class="fas fa-tasks"></i>
-                <span>TodoMaster</span>
-            </div>
-            
-            <nav class="sidebar-nav">
-                  <a href="{% url 'home' %}" ><i class="fas fa-home"></i><span>Dashboard</span></a>
-          <a href="{% url 'today' %}"><i class="fas fa-calendar-alt"></i><span>Today</span></a>
-          <a href="{% url 'important' %}" ><i class="fas fa-star"></i><span>Important</span></a>
-          <a href="{% url 'completed' %}"><i class="fas fa-check-circle"></i><span>Completed</span></a>
-          <a href="{% url 'profile' %}" class="active"><i class="fas fa-user"></i><span>Profile</span></a>
-          <a href="#"><i class="fas fa-trash"></i><span>Trash</span></a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Profile View Div -->
-            <div class="profile-card" id="profile-view">
-                <div class="profile-picture">
-                    <span class="profile-initial">{{ user.full_name|slice:":2"|upper }}</span>
-                    
-                </div>
-
-                <div class="profile-info">
-                    <div class="profile-header">
-                        <h1 class="username">{{ user.full_name }}</h1>
-                        <button class="edit-btn" onclick="showEditForm()">
-                            <i class="fas fa-edit"></i>
-                            Edit Profile
-                        </button>
-                    </div>
-                    
-                    <div class="user-details" >
-                        <div class="detail-item">
-                            <i class="fas fa-user"></i>
-                            <span>Username: <strong>{{ user.username }}</strong></span>
-                        </div>
-                        <div class="detail-item">
-                            <i class="fas fa-envelope"></i>
-                            <span>Email: <strong>{{ user.email }}</strong></span>
-                        </div>
-                        <div class="detail-item">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>Joined: <strong>{{ user.date|date:"F j, Y" }}</strong></span>
-                        </div>
-                        <div class="detail-item">
-                            <i class="fas fa-tasks"></i>
-                            <span>Total Tasks: <strong>{{ task_count }}</strong></span>
-                        </div>
-                    </div>
-
-                    <div class="profile-actions">
-                        <a href="{% url 'logout' %}" class="btn btn-logout">
-                            <i class="fas fa-sign-out-alt"></i>
-                            Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Edit Form Div (Hidden by default) -->
-            <div class="profile-card" id="edit-form" style="display: none;">
-                <form method="POST" action="{% url 'profile' %}">
-                    {% csrf_token %}     
-                    <div class="profile-picture">
-                        <span class="profile-initial">{{ user.username|slice:":2"|upper }}</span>
-                       
-                    </div>
-
-                    <div class="profile-info">
-                        <div class="profile-header">
-                            <h1>Edit Profile</h1>
-                            <button type="button" class="btn btn-cancel" onclick="hideEditForm()">
-                                <i class="fas fa-times"></i>
-                                Cancel
-                            </button>
-                        </div>
-                        
-                        <div class="edit-form-fields">
-                            <div class="form-group">
-                                <label for="id_username"><i class="fas fa-user-tag"></i> Username</label>
-                                <input type="text" id="id_username" name="username" value="{{ user.username }}" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="id_email"><i class="fas fa-envelope"></i> Email</label>
-                                <input type="email" id="id_email" name="email" value="{{ user.email }}" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="id_first_name"><i class="fas fa-user"></i> Full Name</label>
-                                <input type="text" id="id_first_name" name="full_name" value="{{ user.full_name }}">
-                            </div>
-                            
-                            
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-save">
-                                <i class="fas fa-save"></i>
-                                Save Changes
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </main>
+  <div class="profile-container">
+    <!-- Mobile Hamburger -->
+    <div class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
 
-    <!-- Particle.js Script -->
-    <script src="{% static 'js/particles.min.js' %}"></script>
-    <script>
-        // Initialize particles.js
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
-                "color": { "value": "#4361ee" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.5 },
-                "size": { "value": 3, "random": true },
-                "line_linked": { "enable": true, "distance": 150, "color": "#4361ee", "opacity": 0.4, "width": 1 },
-                "move": { "enable": true, "speed": 2 }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": { "enable": true, "mode": "grab" },
-                    "onclick": { "enable": true, "mode": "push" },
-                    "resize": true
-                }
-            }
-        });
+    <!-- Overlay -->
+    <div class="overlay"></div>
 
-        // Toggle between profile view and edit form
-        function showEditForm() {
-            document.getElementById('profile-view').style.display = 'none';
-            document.getElementById('edit-form').style.display = 'block';
-        }
-        
-        function hideEditForm() {
-            document.getElementById('edit-form').style.display = 'none';
-            document.getElementById('profile-view').style.display = 'block';
-        }
-    </script>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <i class="fas fa-tasks"></i>
+        <h1>TodoMaster</h1>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="{% url 'home' %}"><i class="fas fa-home"></i><span>Dashboard</span></a>
+        <a href="{% url 'today' %}"><i class="fas fa-calendar-alt"></i><span>Today</span></a>
+        <a href="{% url 'important' %}"><i class="fas fa-star"></i><span>Important</span></a>
+        <a href="{% url 'completed' %}"><i class="fas fa-check-circle"></i><span>Completed</span></a>
+        <a href="{% url 'profile' %}"><i class="fas fa-user"></i><span>Profile</span></a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Profile View -->
+      <div class="profile-card" id="profile-view">
+        <div class="profile-picture">
+          <span class="profile-initial">{{ user.full_name|slice:":2"|upper }}</span>
+        </div>
+        <div class="profile-info">
+          <div class="profile-header">
+            <h1 class="username">{{ user.full_name }}</h1>
+            <button class="edit-btn" onclick="showEditForm()">
+              <i class="fas fa-edit"></i> Edit Profile
+            </button>
+          </div>
+          <div class="user-details">
+            <div class="detail-item">
+              <i class="fas fa-user"></i>
+              <span>Username: <strong>{{ user.username }}</strong></span>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-envelope"></i>
+              <span>Email: <strong>{{ user.email }}</strong></span>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-calendar-alt"></i>
+              <span>Joined: <strong>{{ user.date|date:"F j, Y" }}</strong></span>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-tasks"></i>
+              <span>Total Tasks: <strong>{{ task_count }}</strong></span>
+            </div>
+          </div>
+          <div class="profile-actions">
+            <a href="{% url 'logout' %}" class="btn btn-logout">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Form -->
+      <div class="profile-card" id="edit-form" style="display: none;">
+        <form method="POST" action="{% url 'profile' %}">
+          {% csrf_token %}
+          <div class="profile-picture">
+            <span class="profile-initial">{{ user.username|slice:":2"|upper }}</span>
+          </div>
+          <div class="profile-info">
+            <div class="profile-header">
+              <h1>Edit Profile</h1>
+              <button type="button" class="btn btn-cancel" onclick="hideEditForm()">
+                <i class="fas fa-times"></i> Cancel
+              </button>
+            </div>
+            <div class="edit-form-fields">
+              <div class="form-group">
+                <label for="id_username"><i class="fas fa-user-tag"></i> Username</label>
+                <input type="text" id="id_username" name="username" value="{{ user.username }}" required>
+              </div>
+              <div class="form-group">
+                <label for="id_email"><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" id="id_email" name="email" value="{{ user.email }}" required>
+              </div>
+              <div class="form-group">
+                <label for="id_first_name"><i class="fas fa-user"></i> Full Name</label>
+                <input type="text" id="id_first_name" name="full_name" value="{{ user.full_name }}">
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-save">
+                <i class="fas fa-save"></i> Save Changes
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function showEditForm() {
+      document.getElementById('profile-view').style.display = 'none';
+      document.getElementById('edit-form').style.display = 'block';
+    }
+
+    function hideEditForm() {
+      document.getElementById('edit-form').style.display = 'none';
+      document.getElementById('profile-view').style.display = 'block';
+    }
+  </script>
 </body>
 </html>

@@ -35,11 +35,13 @@
         background-color: #f5f7fa;
         color: var(--dark);
         line-height: 1.6;
+        overflow-x: hidden;
       }
 
       .admin-container {
         display: flex;
         min-height: 100vh;
+        position: relative;
       }
 
       /* Sidebar Styles */
@@ -50,7 +52,8 @@
         padding: 1.5rem 0;
         position: fixed;
         height: 100vh;
-        transition: all 0.3s;
+        transition: transform 0.3s ease;
+        z-index: 100;
       }
 
       .sidebar-header {
@@ -96,8 +99,51 @@
         flex: 1;
         margin-left: var(--sidebar-width);
         padding: 2rem;
+        transition: margin-left 0.3s ease;
       }
 
+      /* Hamburger Menu */
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 25px;
+        cursor: pointer;
+        position: fixed;
+        left: 15px;
+        top: 15px;
+        z-index: 101;
+      }
+
+      .hamburger span {
+        display: block;
+        height: 3px;
+        width: 100%;
+        background-color: #333;
+        transition: all 0.3s ease;
+      }
+
+      /* Overlay */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* Page Header */
       .page-header {
         display: flex;
         justify-content: space-between;
@@ -259,6 +305,11 @@
         background: #e51778;
       }
 
+      .hamburger.active  {
+        display: none;
+      }
+
+   
       /* Database Table */
       .database-table-container {
         background: var(--white);
@@ -323,27 +374,24 @@
         gap: 0.5rem;
       }
 
-      /* Responsive */
+      /* Responsive Styles */
       @media (max-width: 992px) {
         .sidebar {
-          width: 80px;
-          padding: 1rem 0;
+          transform: translateX(-100%);
         }
-
-        .sidebar-header h2 span,
-        .sidebar-nav li a span {
-          display: none;
+        
+        .sidebar.active {
+          transform: translateX(0);
         }
-
-        .sidebar-nav li a {
-          justify-content: center;
-          padding: 0.75rem;
-        }
-
+        
         .main-content {
-          margin-left: 80px;
+          margin-left: 0;
         }
-
+        
+        .hamburger {
+          display: flex;
+        }
+        
         .stats-container {
           grid-template-columns: repeat(2, 1fr);
         }
@@ -374,11 +422,50 @@
         .stats-container {
           grid-template-columns: 1fr;
         }
+        
+        .page-header {
+          margin-top: 3rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .sidebar{
+          height: auto;
+        }
+        .main-content {
+          padding: 1rem;
+        }
+        
+        .stat-card {
+          padding: 1rem;
+        }
+        
+        .actions-cell {
+          flex-wrap: wrap;
+          justify-content: flex-end;
+        }
+      }
+
+      /* Hide hamburger on desktop */
+      @media (min-width: 993px) {
+        .hamburger, .overlay {
+          display: none !important;
+        }
       }
     </style>
   </head>
   <body>
     <div class="admin-container">
+      <!-- Hamburger Menu -->
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
+      <!-- Overlay -->
+      <div class="overlay"></div>
+
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="sidebar-header">
@@ -450,10 +537,6 @@
               value="{{ request.GET.q }}"
             />
           </form>
-
-          <!-- <button class="btn btn-success">
-            <i class="fas fa-plus"></i> Add Record
-          </button> -->
         </div>
 
         <!-- Database Table -->
@@ -471,59 +554,58 @@
             </thead>
             <tbody>
               {% if datas %}
-  {% for d in datas %}
-    <tr>
-      <td>{{ forloop.counter }}</td>
-      <td>{{ d.full_name }}</td>
-      <td>{{ d.email }}</td>
-      <td>
-        <span class="badge badge-active">
-          {% if d.isApproved %}Active{% else %}In Active{% endif %}
-        </span>
-      </td>
-      <td>{{ d.date }}</td>
-      <td class="actions-cell">
-        <button class="btn btn-danger btn-sm" onclick="handledelete(`{% url 'delete_user' d.id %}`)">
-          <i class="fas fa-trash"></i>
-        </button>
-      </td>
-    </tr>
-  {% endfor %}
-{% else %}
-  <tr>
-    <td colspan="6" style="text-align:center;">No results found.</td>
-  </tr>
-{% endif %}
-
+              {% for d in datas %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ d.full_name }}</td>
+                  <td>{{ d.email }}</td>
+                  <td>
+                    <span class="badge badge-active">
+                      {% if d.isApproved %}Active{% else %}In Active{% endif %}
+                    </span>
+                  </td>
+                  <td>{{ d.date }}</td>
+                  <td class="actions-cell">
+                    <button class="btn btn-danger btn-sm" onclick="handledelete(`{% url 'delete_user' d.id %}`)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="6" style="text-align:center;">No results found.</td>
+                </tr>
+              {% endif %}
             </tbody>
           </table>
         </div>
-
-        <!-- Pagination -->
-        <!-- <div class="pagination">
-          <div class="pagination-info">Showing 1 to 3 of 15 entries</div>
-          <div class="pagination-controls">
-            <button class="btn" disabled>
-              <i class="fas fa-chevron-left"></i> Previous
-            </button>
-            <button class="btn btn-primary">1</button>
-            <button class="btn">2</button>
-            <button class="btn">3</button>
-            <button class="btn">
-              Next <i class="fas fa-chevron-right"></i>
-            </button>
-          </div>
-        </div> -->
       </main>
     </div>
-       <script>
+    <script>
       const handledelete = (id) => {
         const ask = confirm("Do you want to delete task?")
         if(ask){
           window.location.href= id
         }
-
       }
+      
+      // Mobile menu toggle functionality
+      const hamburger = document.querySelector('.hamburger');
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.querySelector('.overlay');
+      
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+      });
+      
+      overlay.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+      });
     </script>
   </body>
 </html>

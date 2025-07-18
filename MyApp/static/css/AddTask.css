@@ -279,7 +279,91 @@ body {
     gap: 1rem;
     margin-top: 2rem;
 }
-
+ @media (max-width: 768px) {
+        .todo-container {
+          position: relative;
+        }
+        
+        .sidebar {
+          position: fixed;
+          left: -250px;
+          top: 0;
+          bottom: 0;
+          width: 250px;
+          transition: left 0.3s ease;
+          z-index: 1000;
+        }
+        
+        .sidebar.active {
+          left: 0;
+        }
+        
+        .hamburger {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          width: 30px;
+          height: 25px;
+          cursor: pointer;
+          position: fixed;
+          left: 15px;
+          top: 15px;
+          z-index: 1001;
+        }
+        
+        .hamburger span {
+          display: block;
+          height: 3px;
+          width: 100%;
+          background-color: #333;
+          transition: all 0.3s ease;
+        }
+        .hamburger.active{
+          display: none;
+        }
+        .hamburger.active span:nth-child(1) {
+          transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+          opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+          transform: rotate(-45deg) translate(7px, -6px);
+        }
+        
+        .main-content {
+          margin-left: 0;
+          padding-top: 60px;
+        }
+        
+        .content-header {
+          padding-left: 60px;
+        }
+        
+        .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 999;
+          display: none;
+        }
+        
+        .overlay.active {
+          display: block;
+        }
+      }
+      
+      /* Hide hamburger on desktop */
+      @media (min-width: 769px) {
+        .hamburger, .overlay {
+          display: none !important;
+        }
+      }
 /* Responsive Design */
 @media (max-width: 992px) {
     .sidebar {
@@ -309,8 +393,7 @@ body {
     }
     
     .content-header {
-        flex-direction: column;
-        align-items: flex-start;
+        padding-left: 0;
         gap: 1rem;
     }
     

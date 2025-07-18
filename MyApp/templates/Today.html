@@ -17,7 +17,29 @@
         let user = "{{ user.username }}";
         let user_icon = user.slice(0, 2).toUpperCase();
         document.getElementById("avatar").innerText = user_icon;
+
+
+            const hamburger = document.querySelector('.hamburger');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.overlay');
+        
+        if (hamburger) {
+          hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+          });
+        }
+        
+        if (overlay) {
+          overlay.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+          });
+        }
       });
+      
     </script>
   </head>
   <body>
@@ -72,6 +94,16 @@
 
     <div class="todo-container">
       <!-- Sidebar -->
+    <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
+      <!-- Overlay for mobile menu -->
+      <div class="overlay"></div>
+
+      <!-- Sidebar -->
       <aside class="sidebar">
         <div class="sidebar-header">
           <i class="fas fa-tasks"></i>
@@ -79,12 +111,11 @@
         </div>
 
         <nav class="sidebar-nav">
-          <a href="{% url 'home' %}" ><i class="fas fa-home"></i><span>Dashboard</span></a>
-          <a href="{% url 'today' %}" class="active"><i class="fas fa-calendar-alt"></i><span>Today</span></a>
+          <a href="{% url 'home' %}"><i class="fas fa-home"></i><span>Dashboard</span></a>
+          <a href="{% url 'today' %} " class="active"><i class="fas fa-calendar-alt"></i><span>Today</span></a>
           <a href="{% url 'important' %}"><i class="fas fa-star"></i><span>Important</span></a>
-          <a href="#"><i class="fas fa-check-circle"></i><span>Completed</span></a>
+          <a href="{% url 'completed' %}"><i class="fas fa-check-circle"></i><span>Completed</span></a>
           <a href="{% url 'profile' %}"><i class="fas fa-user"></i><span>Profile</span></a>
-          <a href="#"><i class="fas fa-trash"></i><span>Trash</span></a>
         </nav>
 
         <div class="sidebar-footer">
@@ -97,6 +128,7 @@
           </div>
         </div>
       </aside>
+
 
       <!-- Main Content -->
       <main class="main-content">
@@ -137,9 +169,9 @@
               <button class="btn-icon star {% if t.important %}active{% endif %}">
                 <i class="{% if t.important %}fas{% else %}far{% endif %} fa-star"></i>
               </button>
-              <button class="btn-icon delete">
+              <!-- <button class="btn-icon delete">
                 <i class="far fa-trash-alt"></i>
-              </button>
+              </button> -->
             </div>
           </div>
           {% empty %}
