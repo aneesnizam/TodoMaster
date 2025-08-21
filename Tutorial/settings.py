@@ -1,6 +1,6 @@
 
 from decouple import config, UndefinedValueError
-
+import dj_database_url
 from pathlib import Path
 import logging
 
@@ -66,25 +66,11 @@ WSGI_APPLICATION = 'Tutorial.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 try:
-    engine = config('DB_ENGINE')
-    name = config('DB_NAME')
-    user = config('DB_USER')
-    password = config('DB_PASSWORD')
-    host = config('DB_HOST')
-    port = config('DB_PORT')
-
+    DATABASE_URL = config("DATABASE_URL")  # Example: postgres://USER:PASS@HOST:PORT/NAME
     DATABASES = {
-        'default': {
-            'ENGINE': engine,
-            'NAME': name,
-            'USER': user,
-            'PASSWORD': password,
-            'HOST': host,
-            'PORT': port,
-        }
+        "default": dj_database_url.parse(DATABASE_URL)
     }
 
 except UndefinedValueError:
