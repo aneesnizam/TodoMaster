@@ -50,54 +50,64 @@
     </script>
   </head>
   <body>
-    {% if messages %}
-    <div>
-      {% for message in messages %}
-      <div
-        style="
-          padding: 12px;
-          width: 50%;
-          left: 50%;
-          transform: translateX(-50%);
-          position: fixed;
-          top: 1px;
-          border-radius: 5px;
-          text-align: center;
-          color: white;
-          {% if message.tags == 'success' %}
-            background-color: #4CAF50;
-          {% elif message.tags == 'error' %}
-            background-color: #f44336;
-          {% elif message.tags == 'warning' %}
-            background-color: #ff9800;
-          {% elif message.tags == 'info' %}
-            background-color: #2196F3;
-          {% else %}
-            background-color: #333;
-          {% endif %}
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        "
-      >
-        <span style="flex-grow: 1">{{ message }}</span>
-        <span
-          style="
-            cursor: pointer;
-            font-size: 20px;
-            line-height: 20px;
-            padding: 0 8px;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-          "
-          onmouseover="this.style.opacity='1'"
-          onmouseout="this.style.opacity='0.8'"
-          onclick="this.parentElement.remove()"
-          >&times;</span>
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %}
+   {% if messages %}
+<div id="django-messages">
+  {% for message in messages %}
+  <div
+    style="
+      padding: 12px;
+      width: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+      position: fixed;
+      top: 1px;
+      border-radius: 5px;
+      text-align: center;
+      color: white;
+      {% if message.tags == 'success' %}
+        background-color: #4CAF50;
+      {% elif message.tags == 'error' %}
+        background-color: #f44336;
+      {% elif message.tags == 'warning' %}
+        background-color: #ff9800;
+      {% elif message.tags == 'info' %}
+        background-color: #2196F3;
+      {% else %}
+        background-color: #333;
+      {% endif %}
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    "
+  >
+    <span style="flex-grow: 1">{{ message }}</span>
+    <span
+      style="
+        cursor: pointer;
+        font-size: 20px;
+        line-height: 20px;
+        padding: 0 8px;
+        opacity: 0.8;
+        transition: opacity 0.3s;
+      "
+      onmouseover="this.style.opacity='1'"
+      onmouseout="this.style.opacity='0.8'"
+      onclick="this.parentElement.remove()"
+    >&times;</span>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+  // Auto-remove messages after 5 seconds
+  setTimeout(() => {
+    document.querySelectorAll("#django-messages > div").forEach(el => {
+      el.remove();
+    });
+  }, 5000);
+</script>
+{% endif %}
 
     <div class="todo-container">
       <!-- Hamburger Menu Icon (Mobile Only) -->

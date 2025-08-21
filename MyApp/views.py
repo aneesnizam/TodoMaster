@@ -28,10 +28,7 @@ def login_user(request):
         if user is None:
             messages.error(request, 'User does not exist')
             return render(request, 'Login.html')
-
-        if not user.isApproved:
-            messages.error(request, 'Your account is pending approval')
-            return render(request, 'Login.html')
+        
 
         if check_password(password, user.password):
             # Store user in session

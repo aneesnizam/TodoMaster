@@ -9,7 +9,7 @@ class userDatas(models.Model):
     date = models.DateField(auto_now_add=True)
     
     isblocked = models.BooleanField(default=False)
-    isApproved = models.BooleanField(default=False)
+    isApproved = models.BooleanField(default=True)
     
     def __str__(self):
         return self.username
